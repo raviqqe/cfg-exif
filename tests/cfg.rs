@@ -43,4 +43,14 @@ fn not() {
         }),
         42
     );
+    assert_eq!(
+        cfg!(if (target_os == "fuchsia") {
+            0
+        } else if (feature == "foo") {
+            1
+        } else {
+            42
+        }),
+        42
+    );
 }
