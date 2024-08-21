@@ -1,6 +1,7 @@
 #![doc = include_str!("../README.md")]
 #![no_std]
 
+/// Compiles expressions conditionally on features.
 #[macro_export]
 macro_rules! feature {
     (if $name1:literal { $then1:expr } $(else if $name2:literal { $then2:expr })* else { $else:expr }) => {
@@ -18,6 +19,7 @@ macro_rules! feature {
     };
 }
 
+/// Compiles expressions conditionally on compile configurations.
 #[macro_export]
 macro_rules! cfg {
     (if ($name1:expr) { $then1:expr } $(else if ($name2:expr) { $then2:expr })* else { $else:expr }) => {
