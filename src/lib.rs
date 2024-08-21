@@ -44,10 +44,10 @@ macro_rules! feature {
 /// assert_eq!(
 ///     cfg!(if (feature == "foo") {
 ///         0
-///     } else if (not(target_os == "linux")) {
-///         1
-///     } else {
+///     } else if (not(target_os == "fuchsia")) {
 ///         42
+///     } else {
+///         1
 ///     }),
 ///     42
 /// );
