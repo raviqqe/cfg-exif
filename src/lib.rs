@@ -32,6 +32,16 @@ macro_rules! cfg {
             cfg!($(if $condition { $then2 } else)* { $else })
         }
     }};
+    (if (not($key:ident == $value:literal)) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
+        #[cfg(not($key = $value))]
+        {
+            $then1
+        }
+        #[cfg($key = $value)]
+        {
+            cfg!($(if $condition { $then2 } else)* { $else })
+        }
+    }};
     ({ $else:expr }) => {{
         {
             $else

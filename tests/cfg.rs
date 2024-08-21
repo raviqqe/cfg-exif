@@ -29,3 +29,18 @@ fn target_os() {
         42
     );
 }
+
+#[test]
+fn not() {
+    assert_eq!(cfg!(if (not(feature == "foo")) { 42 } else { 13 }), 42);
+    assert_eq!(
+        cfg!(if (not(feature == "foo")) {
+            42
+        } else if (not(feature == "bar")) {
+            42
+        } else {
+            13
+        }),
+        42
+    );
+}
