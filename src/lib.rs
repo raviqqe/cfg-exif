@@ -8,9 +8,9 @@
 /// ```rust
 /// assert_eq!(
 ///     cfg_exif::feature!(if "foo" {
-///         13
+///         0
 ///     } else if "bar" {
-///         13
+///         1
 ///     } else {
 ///         42
 ///     }),
