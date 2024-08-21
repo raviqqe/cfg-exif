@@ -32,11 +32,11 @@ fn target_os() {
 
 #[test]
 fn not() {
-    assert_eq!(cfg!(if (not(feature == "foo")) { 42 } else { 0 }), 42);
+    assert_eq!(cfg!(if (feature != "foo") { 42 } else { 0 }), 42);
     assert_eq!(
-        cfg!(if (not(feature == "foo")) {
+        cfg!(if (feature != "foo") {
             42
-        } else if (not(target_os == "fuchsia")) {
+        } else if (target_os != "fuchsia") {
             0
         } else {
             1
@@ -50,7 +50,7 @@ fn mix() {
     assert_eq!(
         cfg!(if (feature == "foo") {
             0
-        } else if (not(target_os == "fuchsia")) {
+        } else if (target_os != "fuchsia") {
             42
         } else {
             1
@@ -58,7 +58,7 @@ fn mix() {
         42
     );
     assert_eq!(
-        cfg!(if (not(target_os == "fuchsia")) {
+        cfg!(if (target_os != "fuchsia") {
             42
         } else if (feature == "foo") {
             0
