@@ -1,2 +1,11 @@
 # cfg-exif
-`cfg-if` as expressions
+
+`cfg-if` in expressions.
+
+## Features
+
+- `rustfmt` friendly
+
+## License
+
+[The Unlicense](UNLICENSE)

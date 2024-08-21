@@ -1,0 +1,10 @@
+[package]
+name = "cfg-exif"
+description = "Conditional compilation in expressions"
+version = "0.1.0"
+edition = "2021"
+license-file = "./UNLICENSE"
+
+[workspace.lints.rust]
+missing_docs = "deny"
+warnings = "deny"
