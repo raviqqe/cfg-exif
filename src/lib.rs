@@ -5,34 +5,36 @@
 #[macro_export]
 macro_rules! feature {
     (if $name1:literal { $then1:expr } $(else if $name2:literal { $then2:expr })* else { $else:expr }) => {
-        (|| {
+        {
             #[cfg(feature = $name1)]
-            return $then1;
+            { $then1 }
             $(
                 #[cfg(feature = $name2)]
-                return $then2;
+                { $then2 }
             )*
             #[cfg(not(feature = $name1))]
             $(#[cfg(not(feature = $name2))])*
-            return $else;
-        })()
+            { $else }
+        }
     };
 }
 
 /// Compiles expressions conditionally on compile configurations.
 #[macro_export]
 macro_rules! cfg {
-    (if ($name1:expr) { $then1:expr } $(else if ($name2:expr) { $then2:expr })* else { $else:expr }) => {
-        (|| {
-            #[cfg(feature = $name1)]
-            return $then1;
-            $(
-                #[cfg(feature = $name2)]
-                return $then2;
-            )*
-            #[cfg(not(feature = $name1))]
-            $(#[cfg(not(feature = $name2))])*
-            return $else;
-        })()
-    };
+    (if $key:ident == $value:literal { $then1:expr } else $(if $name2:literal { $then2:expr } else)* { $else:expr }) => {{
+        #[cfg($key = $value)]
+        {
+            $then1
+        }
+        #[cfg(not($key = $value))]
+        {
+            $else
+        }
+    }};
+    ({ $else:expr }) => {{
+        {
+            $else
+        }
+    }};
 }
