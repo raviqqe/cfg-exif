@@ -7,31 +7,39 @@
 ///
 /// ```rust
 /// assert_eq!(
-///     cfg_exif::feature!(if "foo" {
+///     cfg_exif::feature!(if ("foo") {
 ///         0
-///     } else if "bar" {
-///         1
-///     } else {
+///     } else if (!"bar") {
 ///         42
+///     } else {
+///         1
 ///     }),
 ///     42
 /// );
 /// ```
 #[macro_export]
 macro_rules! feature {
-    (if $name1:literal { $then1:expr } $(else if $name2:literal { $then2:expr })* else { $else:expr }) => {
+    (if ($name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
         {
-            #[cfg(feature = $name1)]
+            #[cfg(feature = $name)]
             { $then1 }
-            $(
-                #[cfg(feature = $name2)]
-                { $then2 }
-            )*
-            #[cfg(not(feature = $name1))]
-            $(#[cfg(not(feature = $name2))])*
-            { $else }
+            #[cfg(not(feature = $name))]
+            { $crate::feature!($(if $condition { $then2 } else)* { $else }) }
         }
     };
+    (if (!$name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
+        {
+            #[cfg(not(feature = $name))]
+            { $then1 }
+            #[cfg(feature = $name)]
+            { $crate::feature!($(if $condition { $then2 } else)* { $else }) }
+        }
+    };
+    ({ $else:expr }) => {{
+        {
+            $else
+        }
+    }};
 }
 
 /// Compiles expressions conditionally on compile configurations.
@@ -62,7 +70,7 @@ macro_rules! cfg {
         }
         #[cfg(not($key = $value))]
         {
-            cfg!($(if $condition { $then2 } else)* { $else })
+            $crate::cfg!($(if $condition { $then2 } else)* { $else })
         }
     }};
     (if ($key:ident != $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
@@ -72,7 +80,7 @@ macro_rules! cfg {
         }
         #[cfg($key = $value)]
         {
-            cfg!($(if $condition { $then2 } else)* { $else })
+            $crate::cfg!($(if $condition { $then2 } else)* { $else })
         }
     }};
     ({ $else:expr }) => {{
