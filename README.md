@@ -4,6 +4,7 @@
 
 ## Features
 
+- Conditional compilation in expressions
 - `rustfmt` friendly
 
 ## License
