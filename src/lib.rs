@@ -9,10 +9,10 @@
 /// assert_eq!(
 ///     cfg_exif::feature!(if ("foo") {
 ///         0
-///     } else if ("bar") {
-///         1
-///     } else {
+///     } else if (!"bar") {
 ///         42
+///     } else {
+///         1
 ///     }),
 ///     42
 /// );
@@ -27,12 +27,12 @@ macro_rules! feature {
             { $crate::feature!($(if $condition { $then2 } else)* { $else }) }
         }
     };
-    (if !$name1:literal { $then1:expr } else $(if $(!)?$name2:literal { $then2:expr } else)* { $else:expr }) => {
+    (if (!$name:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {
         {
-            #[cfg(not(feature = $name1))]
+            #[cfg(not(feature = $name))]
             { $then1 }
-            #[cfg(feature = $name1)]
-            { $crate::feature!($(if $(!)?$name2:literal { $then2:expr } else)* { $else:expr }) }
+            #[cfg(feature = $name)]
+            { $crate::feature!($(if $condition { $then2 } else)* { $else }) }
         }
     };
     ({ $else:expr }) => {{
