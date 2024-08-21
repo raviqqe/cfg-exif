@@ -44,7 +44,7 @@ macro_rules! feature {
 /// assert_eq!(
 ///     cfg!(if (feature == "foo") {
 ///         0
-///     } else if (not(target_os == "fuchsia")) {
+///     } else if (target_os != "fuchsia") {
 ///         42
 ///     } else {
 ///         1
@@ -65,7 +65,7 @@ macro_rules! cfg {
             cfg!($(if $condition { $then2 } else)* { $else })
         }
     }};
-    (if (not($key:ident == $value:literal)) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
+    (if ($key:ident != $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
         #[cfg(not($key = $value))]
         {
             $then1
