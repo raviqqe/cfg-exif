@@ -22,14 +22,14 @@ macro_rules! feature {
 /// Compiles expressions conditionally on compile configurations.
 #[macro_export]
 macro_rules! cfg {
-    (if $key:ident == $value:literal { $then1:expr } else $(if $name2:literal { $then2:expr } else)* { $else:expr }) => {{
+    (if ($key:ident == $value:literal) { $then1:expr } else $(if $condition:tt { $then2:expr } else)* { $else:expr }) => {{
         #[cfg($key = $value)]
         {
             $then1
         }
         #[cfg(not($key = $value))]
         {
-            $else
+            cfg!($(if $condition { $then2 } else)* { $else })
         }
     }};
     ({ $else:expr }) => {{
