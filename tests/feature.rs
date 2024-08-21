@@ -1,4 +1,4 @@
-use rust_cfg_macro::feature;
+use cfg_exif::feature;
 
 #[test]
 fn feature() {
